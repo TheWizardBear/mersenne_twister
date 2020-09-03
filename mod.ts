@@ -4,7 +4,7 @@
  * 
  * 
  */
-export class MersenneTwister {
+export default class MersenneTwister {
 
 	/* Period parameters */
 	N = 624;
@@ -127,8 +127,8 @@ export class MersenneTwister {
 	 * Generates a random number on [0,0x7fffffff]-interval
 	 * origin name genrand_int3
 	 * 
-	 *     const prng = MersenneTwister(5555);
-	 *     console.log(prng.random_int31()); // 
+	 *    const prng = new MersenneTwister(5555);
+   *		console.log(prng.random_int31()); // 1196907045
 	 *
 	 */
 	random_int31() {

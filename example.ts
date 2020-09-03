@@ -1,6 +1,5 @@
 import MersenneTwister from "./mod.ts";
 
-let prng = new MersenneTwister(3);
+const prng = new MersenneTwister(5555);
 
-
-console.log(prng.random())
+console.log(prng.random_int31()); // 1196907045
