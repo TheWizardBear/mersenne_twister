@@ -1,20 +1,32 @@
 /**
  * MersenneTwister
  * 
- * 
+ * 	import MersenneTwister from "https://deno.land/x/mersenne_twister/mod.ts";
+ * 	const prng = new MersenneTwister(1234);
+ * 	console.log(prng.random()); // 0.19151945016346872
  * 
  */
 export default class MersenneTwister {
 
-	/* Period parameters */
+	//Period parameters
+
 	N = 624;
 	M = 397;
-	MATRIX_A = 0x9908b0df; /* constant vector a */
-	UPPER_MASK = 0x80000000; /* most significant w-r bits */
-	LOWER_MASK = 0x7fffffff; /* least significant r bits */
 
-	mt = new Array(this.N); /* the array for the state vector */
-	mti = this.N + 1; /* mti==N+1 means mt[N] is not initialized */
+	/* constant vector a */
+	MATRIX_A = 0x9908b0df; 
+
+	/* most significant w-r bits */
+	UPPER_MASK = 0x80000000; 
+
+	/* least significant r bits */
+	LOWER_MASK = 0x7fffffff; 
+
+	/* the array for the state vector */
+	mt = new Array(this.N); 
+
+	/* mti==N+1 means mt[N] is not initialized */
+	mti = this.N + 1; 
 
 	constructor(seed ? : number | number[]) {
 		if (typeof seed === "undefined") {
@@ -29,9 +41,11 @@ export default class MersenneTwister {
 		}
 	}
 
-	/* initializes mt[N] with a seed */
-	/* origin name init_genrand */
-	init_seed(s: number) {
+	/* 
+	* Initializes mt[N] with a seed 
+	* (Original name init_genrand)
+	*/
+	init_seed(s: number) :void {
 		this.mt[0] = s >>> 0;
 		for (this.mti = 1; this.mti < this.N; this.mti++) {
 			let s = this.mt[this.mti - 1] ^ (this.mt[this.mti - 1] >>> 30);
@@ -46,15 +60,15 @@ export default class MersenneTwister {
 		}
 	}
 
-	/* initialize by an array with array-length */
-	/* init_key is the array for initializing keys */
-	/* slight change for C++, 2004/2/26 */
-	init_by_array(init_key: number[]) {
+	/* 
+	* initialize by an array with array-length 
+	* init_key is the array for initializing keys
+	* slight change for C++, 2004/2/26
+	*/
+	init_by_array(init_key: number[]) :void {
 		let key_length = init_key.length;
-		let i, j;
+		let i = 1, j = 0;
 		this.init_seed(19650218);
-		i = 1;
-		j = 0;
 		for (let k = this.N > key_length ? this.N : key_length; k; k--) {
 			let s = this.mt[i - 1] ^ (this.mt[i - 1] >>> 30)
 			this.mt[i] = (this.mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1664525) << 16) + ((s & 0x0000ffff) * 1664525))) +
@@ -127,8 +141,8 @@ export default class MersenneTwister {
 	 * Generates a random number on [0,0x7fffffff]-interval
 	 * (Original name genrand_int3)
 	 * 
-	 * const prng = new MersenneTwister(5555);
-   * console.log(prng.random_int31()); // 1196907045
+	 *  const prng = new MersenneTwister(5555);
+   *  console.log(prng.random_int31()); // 1196907045
 	 *
 	 */
 	random_int31() :number {
@@ -145,21 +159,27 @@ export default class MersenneTwister {
 		/* divided by 2^32-1 */
 	}
 
-	/* generates a random number on [0,1)-real-interval */
+	/*
+	* Ggenerates a random number on [0,1)-real-interval 
+	*/
 	random() :number {
 		return this.random_int() * (1.0 / 4294967296.0);
 		/* divided by 2^32 */
 	}
 
-	/* generates a random number on (0,1)-real-interval */
-	/* origin name genrand_real3 */
+	/* 
+	* Generates a random number on (0,1)-real-interval
+	* (Original name genrand_real3)
+	*/
 	random_excl() :number {
 		return (this.random_int() + 0.5) * (1.0 / 4294967296.0);
 		/* divided by 2^32 */
 	}
 
-	/* generates a random number on [0,1) with 53-bit resolution*/
-	/* origin name genrand_res53 */
+	/* 
+	* Generates a random number on [0,1) with 53-bit resolution
+	* (Original name genrand_res53)
+	*/
 	random_long() :number {
 		let a = this.random_int() >>> 5,
 			b = this.random_int() >>> 6;
