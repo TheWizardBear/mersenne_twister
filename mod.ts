@@ -31,7 +31,6 @@ export default class MersenneTwister {
 	constructor(seed ? : number | number[]) {
 		if (typeof seed === "undefined") {
 			seed = new Date().getTime();
-			console.log(seed)
 		}
 
 		if (typeof seed === "number") {
@@ -41,14 +40,14 @@ export default class MersenneTwister {
 		}
 	}
 
-	/* 
+	/**
 	* Initializes mt[N] with a seed 
 	* (Original name init_genrand)
 	*/
 	init_seed(s: number) :void {
 		this.mt[0] = s >>> 0;
 		for (this.mti = 1; this.mti < this.N; this.mti++) {
-			let s = this.mt[this.mti - 1] ^ (this.mt[this.mti - 1] >>> 30);
+			const s = this.mt[this.mti - 1] ^ (this.mt[this.mti - 1] >>> 30);
 			this.mt[this.mti] = (((((s & 0xffff0000) >>> 16) * 1812433253) << 16) + (s & 0x0000ffff) * 1812433253) +
 				this.mti;
 			/* See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier. */
@@ -60,17 +59,17 @@ export default class MersenneTwister {
 		}
 	}
 
-	/* 
+	/**
 	* initialize by an array with array-length 
 	* init_key is the array for initializing keys
 	* slight change for C++, 2004/2/26
 	*/
 	init_by_array(init_key: number[]) :void {
-		let key_length = init_key.length;
+		const key_length = init_key.length;
 		let i = 1, j = 0;
 		this.init_seed(19650218);
 		for (let k = this.N > key_length ? this.N : key_length; k; k--) {
-			let s = this.mt[i - 1] ^ (this.mt[i - 1] >>> 30)
+			const s = this.mt[i - 1] ^ (this.mt[i - 1] >>> 30)
 			this.mt[i] = (this.mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1664525) << 16) + ((s & 0x0000ffff) * 1664525))) +
 				init_key[j] + j; /* non linear */
 			this.mt[i] >>>= 0; /* for WORDSIZE > 32 machines */
@@ -83,7 +82,7 @@ export default class MersenneTwister {
 			if (j >= key_length) j = 0;
 		}
 		for (let k = this.N - 1; k; k--) {
-			let s = this.mt[i - 1] ^ (this.mt[i - 1] >>> 30);
+			const s = this.mt[i - 1] ^ (this.mt[i - 1] >>> 30);
 			this.mt[i] = (this.mt[i] ^ (((((s & 0xffff0000) >>> 16) * 1566083941) << 16) + (s & 0x0000ffff) * 1566083941)) -
 				i; /* non linear */
 			this.mt[i] >>>= 0; /* for WORDSIZE > 32 machines */
@@ -97,11 +96,13 @@ export default class MersenneTwister {
 		this.mt[0] = 0x80000000; /* MSB is 1; assuring non-zero initial array */
 	}
 
-	/* generates a random number on [0,0xffffffff]-interval */
-	/* origin name genrand_int32 */
+	/**
+	 * generates a random number on [0,0xffffffff]-interval 
+	 * (Original name genrand_int32)
+	*/
 	random_int() :number {
 		let y;
-		let mag01 = new Array(0x0, this.MATRIX_A);
+		const mag01 = new Array(0x0, this.MATRIX_A);
 		/* mag01[x] = x * MATRIX_A  for x=0,1 */
 
 		if (this.mti >= this.N) {
@@ -141,8 +142,8 @@ export default class MersenneTwister {
 	 * Generates a random number on [0,0x7fffffff]-interval
 	 * (Original name genrand_int3)
 	 * 
-	 *  const prng = new MersenneTwister(5555);
-   *  console.log(prng.random_int31()); // 1196907045
+	 *   const prng = new MersenneTwister(5555);
+   *   console.log(prng.random_int31()); // 1196907045
 	 *
 	 */
 	random_int31() :number {
@@ -159,15 +160,15 @@ export default class MersenneTwister {
 		/* divided by 2^32-1 */
 	}
 
-	/*
-	* Ggenerates a random number on [0,1)-real-interval 
+	/**
+	* Generates a random number on [0,1)-real-interval 
 	*/
 	random() :number {
 		return this.random_int() * (1.0 / 4294967296.0);
 		/* divided by 2^32 */
 	}
 
-	/* 
+	/**
 	* Generates a random number on (0,1)-real-interval
 	* (Original name genrand_real3)
 	*/
@@ -176,12 +177,12 @@ export default class MersenneTwister {
 		/* divided by 2^32 */
 	}
 
-	/* 
+	/**
 	* Generates a random number on [0,1) with 53-bit resolution
 	* (Original name genrand_res53)
 	*/
 	random_long() :number {
-		let a = this.random_int() >>> 5,
+		const a = this.random_int() >>> 5,
 			b = this.random_int() >>> 6;
 		return (a * 67108864.0 + b) * (1.0 / 9007199254740992.0);
 	}
