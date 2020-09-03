@@ -85,7 +85,7 @@ export default class MersenneTwister {
 
 	/* generates a random number on [0,0xffffffff]-interval */
 	/* origin name genrand_int32 */
-	random_int() {
+	random_int() :number {
 		let y;
 		let mag01 = new Array(0x0, this.MATRIX_A);
 		/* mag01[x] = x * MATRIX_A  for x=0,1 */
@@ -125,39 +125,42 @@ export default class MersenneTwister {
 
 	/**
 	 * Generates a random number on [0,0x7fffffff]-interval
-	 * origin name genrand_int3
+	 * (Original name genrand_int3)
 	 * 
-	 *    const prng = new MersenneTwister(5555);
-   *		console.log(prng.random_int31()); // 1196907045
+	 * const prng = new MersenneTwister(5555);
+   * console.log(prng.random_int31()); // 1196907045
 	 *
 	 */
-	random_int31() {
+	random_int31() :number {
 		return (this.random_int() >>> 1);
 	}
 
-	/* generates a random number on [0,1]-real-interval */
-	/* origin name genrand_real1 */
-	random_incl() {
+	/**
+	 * Generates a random number on [0,1]-real-interval
+	 * (Original name genrand_real1)
+	
+	*/
+	random_incl() :number {
 		return this.random_int() * (1.0 / 4294967295.0);
 		/* divided by 2^32-1 */
 	}
 
 	/* generates a random number on [0,1)-real-interval */
-	random() {
+	random() :number {
 		return this.random_int() * (1.0 / 4294967296.0);
 		/* divided by 2^32 */
 	}
 
 	/* generates a random number on (0,1)-real-interval */
 	/* origin name genrand_real3 */
-	random_excl() {
+	random_excl() :number {
 		return (this.random_int() + 0.5) * (1.0 / 4294967296.0);
 		/* divided by 2^32 */
 	}
 
 	/* generates a random number on [0,1) with 53-bit resolution*/
 	/* origin name genrand_res53 */
-	random_long() {
+	random_long() :number {
 		let a = this.random_int() >>> 5,
 			b = this.random_int() >>> 6;
 		return (a * 67108864.0 + b) * (1.0 / 9007199254740992.0);
